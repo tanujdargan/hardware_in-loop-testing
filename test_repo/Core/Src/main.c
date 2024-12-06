@@ -130,9 +130,9 @@ int main(void)
 	  HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_RESET);
 
 	  HAL_GPIO_WritePin(GPIOB, LD1_Pin, GPIO_PIN_SET);
-	  HAL_Delay(500);
+	  HAL_Delay(10);
 	  HAL_GPIO_WritePin(GPIOB, LD3_Pin, GPIO_PIN_SET);
-	  HAL_Delay(500);
+	  HAL_Delay(10);
 
     /* USER CODE BEGIN 3 */
   }
