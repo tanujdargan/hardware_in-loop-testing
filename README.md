@@ -31,6 +31,7 @@ This can be set up by going to the settings -> actions -> runner and setting up 
     - Run this sudo command to ensure your system's package list is up to date:
    ```
    sudo apt update
+   sudo apt-get update
    ```
     - Install stlink and its dependencies:
     ```
