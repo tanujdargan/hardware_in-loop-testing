@@ -32,6 +32,8 @@ This can be set up by going to the settings -> actions -> runner and setting up 
     ```
     sudo apt-get install stlink-tools
     ```
+    -
+    -
 ## Execution
 The worklfow on the yaml file starts when a push is made to main. 
 Add the `file paths` to the YAML file. These `file paths` are labelled in the `env` section of the YAML file.
