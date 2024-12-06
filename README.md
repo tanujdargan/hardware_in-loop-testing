@@ -28,12 +28,22 @@ This can be set up by going to the settings -> actions -> runner and setting up 
     KERNEL=="tty[A-Z]*[0-9]", MODE="0666"
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", MODE="0666"
     ```
-    - Install stlink
+    - Run this sudo command to ensure your system's package list is up to date:
+   ```
+   sudo apt update
+   ```
+    - Install stlink and its dependencies:
     ```
     sudo apt-get install stlink-tools
     ```
-    -
-    -
+    - Install libtool and its dependencies:
+   ```
+   sudo apt install libtool
+   ```
+    - Install the ARM GCC toolchain:
+   ```
+   sudo apt install gcc-arm-none-eabi
+   ```
 ## Execution
 The worklfow on the yaml file starts when a push is made to main. 
 Add the `file paths` to the YAML file. These `file paths` are labelled in the `env` section of the YAML file.
