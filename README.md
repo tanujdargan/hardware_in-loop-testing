@@ -11,23 +11,6 @@ This project uses a Raspberry Pi as a hub to remotely pull code from Git Hub and
 This can be set up by going to the settings -> actions -> runner and setting up a Linux runner. Follow all the commands '''**except the last command**''' which executes the `run.sh` shell script. 
 4. Libraries
     - Setting up printf and scanf using this [website](https://shawnhymel.com/1873/how-to-use-printf-on-stm32/)
-    - Installing OpenOCD using the code below
-    ``` 
-        git clone git://git.code.sf.net/p/openocd/code
-        cd code/
-        ./bootstrap
-        ./configure
-        make
-        sudo make install
-        cd ..
-        rm -rf code/
-        sudo nano /etc/udev/rules.d/stlink.rules
-    ```
-    Now paste this at the end of the file
-    ```
-    KERNEL=="tty[A-Z]*[0-9]", MODE="0666"
-    SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", MODE="0666"
-    ```
     - Run this sudo command to ensure your system's package list is up to date:
    ```
    sudo apt update
@@ -45,6 +28,24 @@ This can be set up by going to the settings -> actions -> runner and setting up 
    ```
    sudo apt install gcc-arm-none-eabi
    ```
+    - Installing OpenOCD using the code below
+    ``` 
+        git clone git://git.code.sf.net/p/openocd/code
+        cd code/
+        ./bootstrap
+        ./configure
+        make
+        sudo make install
+        cd ..
+        rm -rf code/
+        sudo nano /etc/udev/rules.d/stlink.rules
+    ```
+    Now paste this at the end of the file
+    ```
+    KERNEL=="tty[A-Z]*[0-9]", MODE="0666"
+    SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", MODE="0666"
+    ```
+   
 ## Execution
 The worklfow on the yaml file starts when a push is made to main. 
 Add the `file paths` to the YAML file. These `file paths` are labelled in the `env` section of the YAML file.
