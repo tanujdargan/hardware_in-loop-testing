@@ -21,7 +21,7 @@ This can be set up by going to the settings -> actions -> runner and setting up 
         sudo make install
         cd ..
         rm -rf code/
-        sudo touch /etc/udev/rules.d/stlink.rules
+        sudo nano /etc/udev/rules.d/stlink.rules
     ```
     Now paste this at the end of the file
     ```
