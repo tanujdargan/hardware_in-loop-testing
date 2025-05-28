@@ -7,6 +7,16 @@ on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
     branches: [ "main" ]
+  workflow_dispatch: # Allows manual triggering
+    inputs:
+      target_board:
+        description: 'Which STM32 board to flash?'
+        required: true
+        default: 'BOARD_ALPHA' # Default to Board Alpha
+        type: choice
+        options:
+        - BOARD_ALPHA
+        - BOARD_BETA
   
 env:
   ##path to STM32 folder
@@ -36,7 +46,20 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+      - name: Determine ST-Link Serial Number
+        id: get_serial
+        run: |
+          if [[ "${{ github.event.inputs.target_board }}" == "BOARD_ALPHA" ]]; then
+            echo "SERIAL_NUMBER=${{ secrets.STLINK_SERIAL_BOARD_ALPHA }}" >> $GITHUB_OUTPUT
+          elif [[ "${{ github.event.inputs.target_board }}" == "BOARD_BETA" ]]; then
+            echo "SERIAL_NUMBER=${{ secrets.STLINK_SERIAL_BOARD_BETA }}" >> $GITHUB_OUTPUT
+          else
+            echo "::error::Invalid target_board specified. Got: ${{ github.event.inputs.target_board }}"
+            exit 1
+          fi
       - name: Print modified file
+        env: # Add env here to make STLINK_SERIAL available
+          STLINK_SERIAL: ${{ steps.get_serial.outputs.SERIAL_NUMBER }}
         run: |
           echo $(pwd)
           cd ${{env.path}}
@@ -45,8 +68,32 @@ jobs:
           cd ${{env.path}}/Release   
           arm-none-eabi-objcopy -O binary ${{env.elf}}.elf ${{env.elf}}.bin
           echo Binary file ready
-          st-flash write ${{env.elf}}.bin 0x8000000
+          echo "Attempting to flash board with ST-Link Serial: $STLINK_SERIAL"
+          st-flash --serial "$STLINK_SERIAL" write ${{env.elf}}.bin 0x8000000
           echo Uploaded Code
           sleep 3
-          st-flash reset
+          st-flash --serial "$STLINK_SERIAL" reset
+          echo Reset STM32
+
+      - name: Install HIL Tester Dependencies
+        run: |
+          python -m pip install pyserial # Add other dependencies if any, e.g. RPi.GPIO
+          # On a self-hosted runner, RPi.GPIO might need: sudo apt-get install python3-rpi.gpio
+
+      - name: Run Hardware-in-the-Loop Tests
+        env:
+          STLINK_SERIAL: ${{ steps.get_serial.outputs.SERIAL_NUMBER }}
+        run: |
+          echo "Starting HIL tests..."
+          python hil_tester/main_runner.py \\
+            --code-to-test "${{env.path}}/Release/${{env.elf}}.bin" \\
+            --input-values "hil_tester/schemas/gpio12_pulse_test.json" \\
+            --serial-port "/dev/ttyACM0" \\
+            --stlink-serial "$STLINK_SERIAL" \\
+            --skip-flash \\
+            # --expected-values "hil_tester/schemas/expected_output_placeholder.json" \\
+            # Add --gpio-mode if needed, e.g. --gpio-mode BCM
+            # Add --baud-rate if different from default
+            # Add --receive-timeout if different from default
+          echo "HIL tests finished."
           
