@@ -45,6 +45,11 @@ This can be set up by going to the settings -> actions -> runner and setting up 
     KERNEL=="tty[A-Z]*[0-9]", MODE="0666"
     SUBSYSTEM=="usb", ATTRS{idVendor}=="0483", MODE="0666"
     ```
+
+    Install RPI GPIO library
+    ```
+    sudo apt-get install python3-rpi.gpio
+    ```
    
 ## Execution
 The worklfow on the yaml file starts when a push is made to main. 
