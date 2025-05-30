@@ -65,7 +65,7 @@ rm -f .runnner
 rm -f config.sh
 ```
 
-
+Run tests by doing `python run_test.py my_test_case.json --input-values "override_inputs.json"`
 
 
 
