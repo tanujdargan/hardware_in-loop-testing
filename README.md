@@ -28,6 +28,10 @@ This can be set up by going to the settings -> actions -> runner and setting up 
    ```
    sudo apt install gcc-arm-none-eabi
    ```
+   - OpenOCD requires jimtcl & other build dependencies on RpiOS, install them first:
+        - do `sudo nano /etc/apt/sources.list` and uncomment the apt-get sources (last three links)
+        - run `sudo apt-get update`
+        - now `sudo apt-get build-dep openocd`
     - Installing OpenOCD using the code below
     ``` 
         git clone git://git.code.sf.net/p/openocd/code
