@@ -1,6 +1,11 @@
 # Hardware-in-loop
 Hardware in loop allows remote code uploading onto STM32 boards without physical presence near the boards.
 
+# NOTE
+When setting up a new project, remember to enable external builder and generate make files automatically in STM32CUBE IDE. You can do this by right-clicking project → Properties → C/C++ Build and checking the two boxes. 
+
+(VERY IMPORTANT BUILD WONT WORK ON RPI WITHOUT THIS)
+
 ## Mission
 This project uses a Raspberry Pi as a hub to remotely pull code from Git Hub and upload code to the STM32 board. The aim is to facilitate the rapid development of code.
 
